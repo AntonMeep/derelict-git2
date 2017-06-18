@@ -3,7 +3,7 @@ derelict-git2 [![Page on DUB](https://img.shields.io/dub/v/derelict-git2.svg)](h
 
 A dynamic binding to [libgit2](https://libgit2.github.com/) v0.25.1 for the D programming language.
 
-Please see the sections on [Compiling and Linking](http://derelictorg.github.io/building/overview/) and [The Derelict Loader](http://derelictorg.github.io/loading/loader/) in the Derelict documentation for information on how to build DerelictPQ and load libpq at run time. In the meantime, here's some sample code.
+Please see the sections on [Compiling and Linking](http://derelictorg.github.io/building/overview/) and [The Derelict Loader](http://derelictorg.github.io/loading/loader/) in the Derelict documentation for information on how to build DerelictGit2 and load libgit2 at run time. In the meantime, here's some sample code.
 
 ## Example:
 ```
