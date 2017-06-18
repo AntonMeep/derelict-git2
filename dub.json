@@ -1,0 +1,12 @@
+{
+	"name": "derelict-git2",
+	"authors": [
+		"Anton Fediushin"
+	],
+	"dependencies": {
+		"derelict-util": "~>3.0.0-beta.1"
+	},
+	"description": "A dynamic binding to libgit2",
+	"copyright": "Copyright © 2017, Anton Fediushin",
+	"license": "MIT"
+}
