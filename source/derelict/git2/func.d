@@ -781,10 +781,38 @@ extern(C) @system @nogc nothrow {
 	alias da_git_tree_walk = int function(const(git_tree)*,git_treewalk_mode,git_treewalk_cb,void*);
 	alias da_git_tree_dup = int function(git_tree**,git_tree*);
 	alias da_git_tree_create_updated = int function(git_oid*,git_repository*,git_tree*,size_t,const(git_tree_update)*);
+
+	// ADDED IN v0.26.0 RC1, RC2
+	// repository.h
+	alias da_git_repository_item_path = int function(git_buf*,git_repository*,git_repository_item_t);
+	alias da_git_repository_commondir = const(char)* function(git_repository*);
+	alias da_git_repository_submodule_cache_all = int function(git_repository*);
+	alias da_git_repository_submodule_cache_clear = int function(git_repository*);
+
+	// branch.h
+	alias da_git_branch_is_checked_out = int function(const(git_reference)*);
+
+	// transport.h
+	alias da_git_transport_smart_proxy_options = int function(git_proxy_options*,git_transport*);
+
+	// worktree.h
+	alias da_git_worktree_list = int function(git_strarray*,git_repository*);
+	alias da_git_worktree_lookup = int function(git_worktree**,git_repository*,const(char)*);
+	alias da_git_worktree_open_from_repository = int function(git_worktree**,git_repository*);
+	alias da_git_worktree_free = void function(git_worktree*);
+	alias da_git_worktree_validate = int function(const(git_worktree)*);
+	alias da_git_worktree_add_init_options = int function(git_worktree_add_options*,uint);
+	alias da_git_worktree_add = int function(git_worktree**,git_repository*,const(char)*,const(char)*,const(git_worktree_add_options)*);
+	alias da_git_worktree_lock = int function(git_worktree*,char*);
+	alias da_git_worktree_unlock = int function(git_worktree*);
+	alias da_it_worktree_is_locked = int function(git_buf*,const(git_worktree)*);
+	alias da_git_worktree_prune_init_options = int function(git_worktree_prune_options*,uint);
+	alias da_git_worktree_is_prunable = int function(git_worktree*,git_worktree_prune_options*);
+	alias da_git_worktree_prune = int function(git_worktree*,git_worktree_prune_options*);
 }
 
 __gshared {
-		// annotated_commit.h
+	// annotated_commit.h
 	da_git_annotated_commit_from_ref git_annotated_commit_from_ref;
 	da_git_annotated_commit_from_fetchhead git_annotated_commit_from_fetchhead;
 	da_git_annotated_commit_lookup git_annotated_commit_lookup;
@@ -1527,6 +1555,34 @@ __gshared {
 	da_git_tree_walk git_tree_walk;
 	da_git_tree_dup git_tree_dup;
 	da_git_tree_create_updated git_tree_create_updated;
+
+	// ADDED IN v0.26.0 RC1, RC2
+	// repository.h
+	da_git_repository_item_path git_repository_item_path;
+	da_git_repository_commondir git_repository_commondir;
+	da_git_repository_submodule_cache_all git_repository_submodule_cache_all;
+	da_git_repository_submodule_cache_clear git_repository_submodule_cache_clear;
+
+	// branch.h
+	da_git_branch_is_checked_out git_branch_is_checked_out;
+
+	// transport.h
+	da_git_transport_smart_proxy_options git_transport_smart_proxy_options;
+
+	// worktree.h
+	da_git_worktree_list git_worktree_list;
+	da_git_worktree_lookup git_worktree_lookup;
+	da_git_worktree_open_from_repository git_worktree_open_from_repository;
+	da_git_worktree_free git_worktree_free;
+	da_git_worktree_validate git_worktree_validate;
+	da_git_worktree_add_init_options git_worktree_add_init_options;
+	da_git_worktree_add git_worktree_add;
+	da_git_worktree_lock git_worktree_lock;
+	da_git_worktree_unlock git_worktree_unlock;
+	da_it_worktree_is_locked it_worktree_is_locked;
+	da_git_worktree_prune_init_options git_worktree_prune_init_options;
+	da_git_worktree_is_prunable git_worktree_is_prunable;
+	da_git_worktree_prune git_worktree_prune;
 }
 
 class DerelictGit2Loader : SharedLibLoader {
@@ -2278,6 +2334,34 @@ class DerelictGit2Loader : SharedLibLoader {
 		bindFunc(cast(void**)&git_tree_walk,"git_tree_walk");
 		bindFunc(cast(void**)&git_tree_dup,"git_tree_dup");
 		bindFunc(cast(void**)&git_tree_create_updated,"git_tree_create_updated");
+
+		// ADDED IN v0.26.0 RC1, RC2
+		// repository.h
+		bindFunc(cast(void**)&git_repository_item_path,"git_repository_item_path");
+		bindFunc(cast(void**)&git_repository_commondir,"git_repository_commondir");
+		bindFunc(cast(void**)&git_repository_submodule_cache_all,"git_repository_submodule_cache_all");
+		bindFunc(cast(void**)&git_repository_submodule_cache_clear,"git_repository_submodule_cache_clear");
+
+		// branch.h
+		bindFunc(cast(void**)&git_branch_is_checked_out,"git_branch_is_checked_out");
+
+		// transport.h
+		bindFunc(cast(void**)&git_transport_smart_proxy_options,"git_transport_smart_proxy_options");
+
+		// worktree.h
+		bindFunc(cast(void**)&git_worktree_list,"git_worktree_list");
+		bindFunc(cast(void**)&git_worktree_lookup,"git_worktree_lookup");
+		bindFunc(cast(void**)&git_worktree_open_from_repository,"git_worktree_open_from_repository");
+		bindFunc(cast(void**)&git_worktree_free,"git_worktree_free");
+		bindFunc(cast(void**)&git_worktree_validate,"git_worktree_validate");
+		bindFunc(cast(void**)&git_worktree_add_init_options,"git_worktree_add_init_options");
+		bindFunc(cast(void**)&git_worktree_add,"git_worktree_add");
+		bindFunc(cast(void**)&git_worktree_lock,"git_worktree_lock");
+		bindFunc(cast(void**)&git_worktree_unlock,"git_worktree_unlock");
+		bindFunc(cast(void**)&it_worktree_is_locked,"it_worktree_is_locked");
+		bindFunc(cast(void**)&git_worktree_prune_init_options,"git_worktree_prune_init_options");
+		bindFunc(cast(void**)&git_worktree_is_prunable,"git_worktree_is_prunable");
+		bindFunc(cast(void**)&git_worktree_prune,"git_worktree_prune");
 	}
 }
 

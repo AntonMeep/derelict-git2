@@ -230,6 +230,12 @@ enum git_libgit2_opt_t {
 	GIT_OPT_ENABLE_STRICT_OBJECT_CREATION,
 	GIT_OPT_SET_SSL_CIPHERS,
 	GIT_OPT_GET_USER_AGENT,
+	// ADDED IN v0.26.0 RC1, RC2
+	GIT_OPT_ENABLE_OFS_DELTA,
+	GIT_OPT_ENABLE_FSYNC_GITDIR,
+	GIT_OPT_GET_WINDOWS_SHAREMODE,
+	GIT_OPT_SET_WINDOWS_SHAREMODE,
+	GIT_OPT_ENABLE_STRICT_HASH_VERIFICATION,
 }
 mixin(MakeEnum!git_libgit2_opt_t);
 
@@ -1398,7 +1404,6 @@ struct git_submodule_update_options {
 	uint version_;
 	git_checkout_options checkout_opts;
 	git_fetch_options fetch_opts;
-	uint clone_checkout_strategy;
 	int allow_fetch;
 }
 
@@ -1732,3 +1737,51 @@ enum LIBGIT2_VER_REVISION = 1;
 enum LIBGIT2_VER_PATCH = 0;
 
 enum LIBGIT2_SOVERSION = 25;
+
+// ADDED IN v0.26.0 RC1, RC2
+
+// repository.h
+enum git_repository_item_t {
+	GIT_REPOSITORY_ITEM_GITDIR,
+	GIT_REPOSITORY_ITEM_WORKDIR,
+	GIT_REPOSITORY_ITEM_COMMONDIR,
+	GIT_REPOSITORY_ITEM_INDEX,
+	GIT_REPOSITORY_ITEM_OBJECTS,
+	GIT_REPOSITORY_ITEM_REFS,
+	GIT_REPOSITORY_ITEM_PACKED_REFS,
+	GIT_REPOSITORY_ITEM_REMOTES,
+	GIT_REPOSITORY_ITEM_CONFIG,
+	GIT_REPOSITORY_ITEM_INFO,
+	GIT_REPOSITORY_ITEM_HOOKS,
+	GIT_REPOSITORY_ITEM_LOGS,
+	GIT_REPOSITORY_ITEM_MODULES,
+	GIT_REPOSITORY_ITEM_WORKTREES
+}
+mixin(MakeEnum!git_repository_item_t);
+
+// worktree.h
+
+struct git_worktree_add_options {
+	uint version_;
+	int lock;
+}
+
+enum GIT_WORKTREE_ADD_OPTIONS_VERSION = 1;
+
+enum git_worktree_prune_t {
+	GIT_WORKTREE_PRUNE_VALID = 1u << 0,
+	GIT_WORKTREE_PRUNE_LOCKED = 1u << 1,
+	GIT_WORKTREE_PRUNE_WORKING_TREE = 1u << 2,
+}
+mixin(MakeEnum!git_worktree_prune_t);
+
+struct git_worktree_prune_options {
+	uint version_;
+	uint flags;
+}
+
+enum GIT_WORKTREE_PRUNE_OPTIONS_VERSION = 1;
+
+// type.h
+
+struct git_worktree;
