@@ -782,12 +782,15 @@ extern(C) @system @nogc nothrow {
 	alias da_git_tree_dup = int function(git_tree**,git_tree*);
 	alias da_git_tree_create_updated = int function(git_oid*,git_repository*,git_tree*,size_t,const(git_tree_update)*);
 
-	// ADDED IN v0.26.0 RC1, RC2
+	// ADDED IN v0.26.0
 	// repository.h
 	alias da_git_repository_item_path = int function(git_buf*,git_repository*,git_repository_item_t);
 	alias da_git_repository_commondir = const(char)* function(git_repository*);
 	alias da_git_repository_submodule_cache_all = int function(git_repository*);
 	alias da_git_repository_submodule_cache_clear = int function(git_repository*);
+	alias da_git_repository_open_from_worktree = int function(git_repository**,git_worktree*);
+	alias da_git_repository_head_for_worktree = int function(git_reference**,git_repository*,const(char)*);
+	alias da_git_repository_head_detached_for_worktree = int function(git_repository*,const(char)*);
 
 	// branch.h
 	alias da_git_branch_is_checked_out = int function(const(git_reference)*);
@@ -805,7 +808,7 @@ extern(C) @system @nogc nothrow {
 	alias da_git_worktree_add = int function(git_worktree**,git_repository*,const(char)*,const(char)*,const(git_worktree_add_options)*);
 	alias da_git_worktree_lock = int function(git_worktree*,char*);
 	alias da_git_worktree_unlock = int function(git_worktree*);
-	alias da_it_worktree_is_locked = int function(git_buf*,const(git_worktree)*);
+	alias da_git_worktree_is_locked = int function(git_buf*,const(git_worktree)*);
 	alias da_git_worktree_prune_init_options = int function(git_worktree_prune_options*,uint);
 	alias da_git_worktree_is_prunable = int function(git_worktree*,git_worktree_prune_options*);
 	alias da_git_worktree_prune = int function(git_worktree*,git_worktree_prune_options*);
@@ -1556,12 +1559,15 @@ __gshared {
 	da_git_tree_dup git_tree_dup;
 	da_git_tree_create_updated git_tree_create_updated;
 
-	// ADDED IN v0.26.0 RC1, RC2
+	// ADDED IN v0.26.0
 	// repository.h
 	da_git_repository_item_path git_repository_item_path;
 	da_git_repository_commondir git_repository_commondir;
 	da_git_repository_submodule_cache_all git_repository_submodule_cache_all;
 	da_git_repository_submodule_cache_clear git_repository_submodule_cache_clear;
+	da_git_repository_open_from_worktree git_repository_open_from_worktree;
+	da_git_repository_head_for_worktree git_repository_head_for_worktree;
+	da_git_repository_head_detached_for_worktree git_repository_head_detached_for_worktree;
 
 	// branch.h
 	da_git_branch_is_checked_out git_branch_is_checked_out;
@@ -1579,7 +1585,7 @@ __gshared {
 	da_git_worktree_add git_worktree_add;
 	da_git_worktree_lock git_worktree_lock;
 	da_git_worktree_unlock git_worktree_unlock;
-	da_it_worktree_is_locked it_worktree_is_locked;
+	da_git_worktree_is_locked git_worktree_is_locked;
 	da_git_worktree_prune_init_options git_worktree_prune_init_options;
 	da_git_worktree_is_prunable git_worktree_is_prunable;
 	da_git_worktree_prune git_worktree_prune;
@@ -2335,12 +2341,15 @@ class DerelictGit2Loader : SharedLibLoader {
 		bindFunc(cast(void**)&git_tree_dup,"git_tree_dup");
 		bindFunc(cast(void**)&git_tree_create_updated,"git_tree_create_updated");
 
-		// ADDED IN v0.26.0 RC1, RC2
+		// ADDED IN v0.26.0
 		// repository.h
 		bindFunc(cast(void**)&git_repository_item_path,"git_repository_item_path");
 		bindFunc(cast(void**)&git_repository_commondir,"git_repository_commondir");
 		bindFunc(cast(void**)&git_repository_submodule_cache_all,"git_repository_submodule_cache_all");
 		bindFunc(cast(void**)&git_repository_submodule_cache_clear,"git_repository_submodule_cache_clear");
+		bindFunc(cast(void**)&git_repository_open_from_worktree,"git_repository_open_from_worktree");
+		bindFunc(cast(void**)&git_repository_head_for_worktree,"git_repository_head_for_worktree");
+		bindFunc(cast(void**)&git_repository_head_detached_for_worktree,"git_repository_head_detached_for_worktree");
 
 		// branch.h
 		bindFunc(cast(void**)&git_branch_is_checked_out,"git_branch_is_checked_out");
@@ -2358,7 +2367,7 @@ class DerelictGit2Loader : SharedLibLoader {
 		bindFunc(cast(void**)&git_worktree_add,"git_worktree_add");
 		bindFunc(cast(void**)&git_worktree_lock,"git_worktree_lock");
 		bindFunc(cast(void**)&git_worktree_unlock,"git_worktree_unlock");
-		bindFunc(cast(void**)&it_worktree_is_locked,"it_worktree_is_locked");
+		bindFunc(cast(void**)&git_worktree_is_locked,"git_worktree_is_locked");
 		bindFunc(cast(void**)&git_worktree_prune_init_options,"git_worktree_prune_init_options");
 		bindFunc(cast(void**)&git_worktree_is_prunable,"git_worktree_is_prunable");
 		bindFunc(cast(void**)&git_worktree_prune,"git_worktree_prune");
@@ -2376,7 +2385,7 @@ private static if(Derelict_OS_Windows) {
 } else static if(Derelict_OS_Mac) {
 	enum libNames = "libgit2.dylib";
 } else static if(Derelict_OS_Posix) {
-	enum libNames = "libgit2.so,/usr/local/lib/libgit2.so";
+	enum libNames = "libgit2.so.0.26.0,libgit2.so.26,libgit2.so,/usr/local/lib/libgit2.so";
 } else {
 	static assert(0,"Need to implement libgit2 libNames for this operating system.");
 }

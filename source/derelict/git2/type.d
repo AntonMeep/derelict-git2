@@ -1777,7 +1777,7 @@ mixin(MakeEnum!git_worktree_prune_t);
 
 struct git_worktree_prune_options {
 	uint version_;
-	uint flags;
+	int flags;
 }
 
 enum GIT_WORKTREE_PRUNE_OPTIONS_VERSION = 1;
